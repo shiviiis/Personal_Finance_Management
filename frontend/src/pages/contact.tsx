@@ -1,111 +1,113 @@
-import React, { useState } from "react";
-import "./CSS_primary/contact.css";
-import "./CSS_primary/contactphone.css";
+import React, { useState } from 'react';
+import { Mail, MapPin, Phone } from 'lucide-react';
+import Card from '../components/ui/Card';
+import Input from '../components/ui/Input';
+import Button from '../components/ui/Button';
+import { toast } from 'react-toastify';
+import './Contact.css';
 
-const ContactUs: React.FC = () => {
-  const [form, setForm] = useState({
-    name: "",
-    email: "",
-    category: "Query",
-    message: "",
+const Contact: React.FC = () => {
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    subject: '',
+    message: '',
   });
-  const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  const handleChange = (
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-    >
-  ) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitted(true);
+    setLoading(true);
+
+    // Simulate form submission
+    setTimeout(() => {
+      toast.success('Message sent successfully! We\'ll get back to you soon.');
+      setFormData({ name: '', email: '', subject: '', message: '' });
+      setLoading(false);
+    }, 1000);
   };
 
   return (
-    <div className="main">
-      <div className="middlebox">
-        <div className="image"></div>
-
-        <div className="contact-container">
-          <h2 className="contact-title">Contact Us</h2>
-          {submitted ? (
-            <p className="success-message">
-              Thank you for reaching out! We'll get back to you soon.
-            </p>
-          ) : (
-            <form onSubmit={handleSubmit} className="contact-form">
-              <label>Name</label>
-              <input
-                type="text"
-                name="name"
-                value={form.name}
-                onChange={handleChange}
-                placeholder="Enter your name"
-                required
-              />
-
-              <label>Email</label>
-              <input
-                type="email"
-                name="email"
-                value={form.email}
-                onChange={handleChange}
-                placeholder="Enter your email"
-                required
-              />
-
-              <label>Category</label>
-              <select
-                name="category"
-                value={form.category}
-                onChange={handleChange}
-                required
-              >
-                <option value="Query">Query</option>
-                <option value="Feature Request">Feature Request</option>
-                <option value="Complaint">Complaint</option>
-                <option value="Other">Other</option>
-              </select>
-
-              <label>Message</label>
-              <textarea
-                name="message"
-                value={form.message}
-                onChange={handleChange}
-                placeholder="Enter your message"
-                required
-              ></textarea>
-
-              <button type="submit" className="dropdown-btn">
-                Submit
-              </button>
-            </form>
-          )}
-          <section className="lastquote">
-            <p>
-              "Money is a tool, not a goal. It should be used wisely, not
-              hoarded aimlessly..."
-            </p>
-            <p className="writer">
-              – Inspired by Seneca and modern reflections on wealth.
-            </p>
-          </section>
+    <div className="contact-page">
+      <div className="contact-container">
+        <div className="contact-header">
+          <h1 className="gradient-text">Get In Touch</h1>
+          <p>Have questions? We'd love to hear from you.</p>
         </div>
-      </div>
-      <div className="chat">
-        <p>
-          "Hello, friend! 🚀 Got a question or just want to say hi? We're here
-          to chat with you anytime! 💬"{" "}
-        </p>
-        <button type="submit" className="btn">
-          Chat Now
-        </button>
+
+        <div className="contact-grid">
+          <Card className="contact-info">
+            <h3>Contact Information</h3>
+            <div className="contact-items">
+              <div className="contact-item">
+                <Mail className="contact-icon" />
+                <div>
+                  <h4>Email</h4>
+                  <p>support@financeflow.com</p>
+                </div>
+              </div>
+              <div className="contact-item">
+                <Phone className="contact-icon" />
+                <div>
+                  <h4>Phone</h4>
+                  <p>+1 (555) 123-4567</p>
+                </div>
+              </div>
+              <div className="contact-item">
+                <MapPin className="contact-icon" />
+                <div>
+                  <h4>Address</h4>
+                  <p>123 Finance Street, Money City, FC 12345</p>
+                </div>
+              </div>
+            </div>
+          </Card>
+
+          <Card>
+            <h3>Send Us a Message</h3>
+            <form onSubmit={handleSubmit} className="contact-form">
+              <Input
+                label="Name"
+                placeholder="Your name"
+                value={formData.name}
+                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                required
+              />
+              <Input
+                type="email"
+                label="Email"
+                placeholder="your.email@example.com"
+                value={formData.email}
+                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                required
+              />
+              <Input
+                label="Subject"
+                placeholder="What's this about?"
+                value={formData.subject}
+                onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
+                required
+              />
+              <div className="input-group">
+                <label className="input-label">Message</label>
+                <textarea
+                  className="contact-textarea"
+                  placeholder="Tell us more..."
+                  rows={5}
+                  value={formData.message}
+                  onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                  required
+                />
+              </div>
+              <Button type="submit" loading={loading} fullWidth>
+                Send Message
+              </Button>
+            </form>
+          </Card>
+        </div>
       </div>
     </div>
   );
 };
 
-export default ContactUs;
+export default Contact;

@@ -23,9 +23,13 @@ export const generateToken = (
   const cookieName = "userToken"; 
 
   // Create the token from the user's _id.
-  const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET as string, {
-    expiresIn: "7d",
-  });
+  const token = jwt.sign(
+    { id: user._id }, 
+    process.env.JWT_SECRET_KEY as string, 
+    {
+      expiresIn: process.env.JWT_EXPIRES || "7d",
+    } as jwt.SignOptions
+  );
 
   // Use COOKIE_EXPIRE (in days) from env, defaulting to 1 day.
   const cookieExpireDays = Number(process.env.COOKIE_EXPIRE) || 1;

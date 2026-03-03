@@ -1,77 +1,104 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import "./CSS_primary/auth.css";
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
+import Button from '../components/ui/Button';
+import Card from '../components/ui/Card';
+import './Auth.css';
 
 const VerifyOTP: React.FC = () => {
-  const [otp, setOtp] = useState("");
-  const [Email, setEmail] = useState("");
+  const [otp, setOtp] = useState(['', '', '', '', '', '']);
   const [loading, setLoading] = useState(false);
+  const [timeLeft, setTimeLeft] = useState(600); // 10 minutes
+  const { verifyOTP } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+  const email = location.state?.email || '';
+
   useEffect(() => {
-    const storedEmail = localStorage.getItem("email");
-    if (!storedEmail) {
-      toast.error("Email not found. Please register again.");
-      navigate("/register");
-    } else {
-      setEmail(storedEmail);
+    if (timeLeft === 0) return;
+    const timer = setInterval(() => {
+      setTimeLeft((prev) => prev - 1);
+    }, 1000);
+    return () => clearInterval(timer);
+  }, [timeLeft]);
+
+  const handleChange = (index: number, value: string) => {
+    if (value.length > 1) return;
+    const newOtp = [...otp];
+    newOtp[index] = value;
+    setOtp(newOtp);
+
+    // Auto-focus next input
+    if (value && index < 5) {
+      const nextInput = document.getElementById(`otp-${index + 1}`);
+      nextInput?.focus();
     }
-  }, [navigate]);
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Verify OTP button clicked");
-    console.log(`${Email}`);
-    if (!Email) {
-      toast.error("Email not found. Please register again.");
-      return;
-    }
-
-    if (!otp) {
-      toast.error("Please enter the OTP.");
+    const otpCode = otp.join('');
+    if (otpCode.length !== 6) {
+      alert('Please enter all 6 digits');
       return;
     }
 
     setLoading(true);
     try {
-      const response = await axios.post(
-        "http://localhost:5000/api/users/verify-otp",
-        {
-          Email: Email,
-          otp,
-        }
-      );
-      toast.success(response.data.message);
-
-      navigate("/login");
-    } catch (error: unknown) {
-      if (axios.isAxiosError(error)) {
-        toast.error(error.response?.data?.message || "OTP verification failed");
-      } else {
-        toast.error("An unexpected error occurred");
-      }
+      await verifyOTP(email, otpCode);
+      navigate('/login');
+    } catch (error) {
+      console.error('Verification error:', error);
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
+
+  const minutes = Math.floor(timeLeft / 60);
+  const seconds = timeLeft % 60;
 
   return (
     <div className="auth-container">
-      <h2>Verify OTP</h2>
-      <p>Enter the OTP sent to your email</p>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          name="otp"
-          placeholder="Enter OTP"
-          value={otp}
-          onChange={(e) => setOtp(e.target.value)}
-          required
-        />
-        <button type="submit" disabled={loading}>
-          {loading ? "Verifying..." : "Verify OTP"}
-        </button>
-      </form>
+      <Card className="auth-card">
+        <div className="auth-header">
+          <h1 className="gradient-text">Verify Your Email</h1>
+          <p>Enter the 6-digit code sent to {email}</p>
+        </div>
+
+        <form onSubmit={handleSubmit} className="auth-form">
+          <div className="otp-inputs">
+            {otp.map((digit, index) => (
+              <input
+                key={index}
+                id={`otp-${index}`}
+                type="text"
+                maxLength={1}
+                value={digit}
+                onChange={(e) => handleChange(index, e.target.value)}
+                className="otp-input"
+                required
+              />
+            ))}
+          </div>
+
+          <div className="otp-timer">
+            Time remaining: {String(minutes).padStart(2, '0')}:{String(seconds).padStart(2, '0')}
+          </div>
+
+          <Button type="submit" loading={loading} fullWidth>
+            Verify OTP
+          </Button>
+        </form>
+
+        <div className="auth-footer">
+          <p>
+            Didn't receive the code?{' '}
+            <button className="auth-link" type="button">
+              Resend
+            </button>
+          </p>
+        </div>
+      </Card>
     </div>
   );
 };

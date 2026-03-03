@@ -1,56 +1,86 @@
-//login
-
-import {toast} from "react-toastify";
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
-import "./CSS_primary/auth.css"; // Common styles for login and registration
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { Mail, Lock, Eye, EyeOff } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
+import Button from '../components/ui/Button';
+import Input from '../components/ui/Input';
+import Card from '../components/ui/Card';
+import './Auth.css';
 
 const Login: React.FC = () => {
-  const [input, setInput] = useState({ Email: "", Password: ""});
-  const [error, setError] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const { login } = useAuth();
   const navigate = useNavigate();
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    setInput({ ...input, [e.target.name]: e.target.value });
-  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError("");
-  
-    try {
-      const { data } = await axios.post("http://localhost:5000/api/users/login", input, {
-        withCredentials: true,
-        headers: { "Content-Type": "application/json" },
-      });
-      console.log(data.token);
-      localStorage.setItem("token", data.token);
-      localStorage.setItem("userId", data.userId);
+    setLoading(true);
 
-      toast.success("Login successful!");
-      navigate("/");
-    } catch (err: unknown) {  
-      if (axios.isAxiosError(err)) {
-        toast.error(err.response?.data?.message || "Login failed! Please check your credentials.");
-      } else {
-        toast.error("An unexpected error occurred.");
-      }
+    try {
+      await login(email, password);
+      navigate('/');
+    } catch (error) {
+      console.error('Login error:', error);
+    } finally {
+      setLoading(false);
     }
   };
-  
 
   return (
     <div className="auth-container">
-      <h2>Login</h2>
-      {error && <p className="error">{error}</p>} {}
-      <form onSubmit={handleSubmit}>
-        <input type="Email" name="Email" placeholder="Email" value={input.Email} onChange={handleChange} required />
-        <input type="Password" name="Password" placeholder="Password" value={input.Password} onChange={handleChange} required />
+      <Card className="auth-card">
+        <div className="auth-header">
+          <h1 className="gradient-text">Welcome Back</h1>
+          <p>Sign in to continue to your account</p>
+        </div>
 
-        <button type="submit">Login</button>
-      </form>
-      <p>Don't have an account? <span onClick={() => navigate("/register")}>Sign up</span></p>
+        <form onSubmit={handleSubmit} className="auth-form">
+          <Input
+            type="email"
+            label="Email Address"
+            placeholder="Enter your email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            icon={<Mail size={20} />}
+            required
+          />
+
+          <div style={{ position: 'relative' }}>
+            <Input
+              type={showPassword ? 'text' : 'password'}
+              label="Password"
+              placeholder="Enter your password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              icon={<Lock size={20} />}
+              required
+            />
+            <button
+              type="button"
+              className="password-toggle"
+              onClick={() => setShowPassword(!showPassword)}
+            >
+              {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+            </button>
+          </div>
+
+          <Button type="submit" loading={loading} fullWidth>
+            Sign In
+          </Button>
+        </form>
+
+        <div className="auth-footer">
+          <p>
+            Don't have an account?{' '}
+            <Link to="/register" className="auth-link">
+              Sign up
+            </Link>
+          </p>
+        </div>
+      </Card>
     </div>
   );
 };

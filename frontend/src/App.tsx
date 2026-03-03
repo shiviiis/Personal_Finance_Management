@@ -1,67 +1,80 @@
-import React, { useState } from "react";
-import { HashRouter as Router, Routes, Route, Navigate, useLocation } from "react-router-dom";
-import Navbar from "./components/navbar";
-import Sidebar from "./components/sidebar";
-import Footer from "./components/footer";
-import HomePage from "./pages/homepage";
-import Records from "./pages/records";
-import Profile from "./pages/profile";
-import ContactUs from "./pages/contact";
-import TermsOfService from "./pages/terms";
-import PrivacyPolicy from "./pages/privacy";
-import Login from "./pages/login";
-import Register from "./pages/register";
-import "./App.css";
-import VerifyOTP from "./pages/verifyotp";
-import { ToastContainer } from "react-toastify";
+import React, { useState } from 'react';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import { AuthProvider, ProtectedRoute } from './context/AuthContext';
+import { SidebarProvider } from './context/SidebarContext';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
-const App: React.FC = () => {
-  const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(true);
+// Layout Components
+import Navbar from './components/layout/Navbar';
+import ToggleableSidebar from './components/layout/ToggleableSidebar';
+import Footer from './components/layout/Footer';
 
-  // Get current route
+// Pages
+import Homepage from './pages/Homepage';
+import Login from './pages/Login';
+import Register from './pages/Register';
+import VerifyOTP from './pages/VerifyOTP';
+import Dashboard from './pages/Dashboard';
+import Transactions from './pages/Transactions';
+import Profile from './pages/Profile';
+import Contact from './pages/Contact';
+import Privacy from './pages/Privacy';
+import Terms from './pages/Terms';
+import Analysis from './pages/Analysis';
+import Budgets from './pages/Budgets';
+import Accounts from './pages/Accounts';
+
+import './App.css';
+
+const AppContent: React.FC = () => {
   const location = useLocation();
-  const isAuthPage = location.pathname === "/login" || location.pathname === "/register";
+  const isAuthPage = ['/login', '/register', '/verify-otp'].includes(location.pathname);
 
   return (
-    <div className="flex h-screen flex-col">
-      {/* Hide Sidebar & Navbar for Auth Pages */}
-      {!isAuthPage && (
-        <>
-          <Sidebar isOpen={isSidebarOpen} setIsOpen={setIsSidebarOpen} />
-          {!isSidebarOpen && <Navbar />}
-        </>
-      )}
+    <div className="app">
+      {!isAuthPage && <Navbar />}
+      
+      {/* Toggleable Sidebar */}
+      <ToggleableSidebar />
+      
+      <div className="app-content">
+        <Routes>
+          {/* Public Routes */}
+          <Route path="/" element={<Homepage />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/verify-otp" element={<VerifyOTP />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/privacy" element={<Privacy />} />
+          <Route path="/terms" element={<Terms />} />
 
-      <div className="flex-1 flex flex-col">
-        <div className="p-4 overflow-auto flex-grow">
-        <ToastContainer position="top-right" autoClose={3000} />
-          <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/records" element={<Records />} />
-            <Route path="/profile" element={<Profile />} />
-            <Route path="/contact" element={<ContactUs />} />
-            <Route path="/terms" element={<TermsOfService />} />
-            <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/verify_otp" element={<VerifyOTP/>}/>
-            <Route path="/register" element={<Register />} />
-            {/* Redirect 404 pages to home */}
-            <Route path="*" element={<Navigate to="/" replace />} />
-          </Routes>
-        </div>
-
-        {/* Hide Footer for Auth Pages */}
-        {!isAuthPage && <Footer />}
+          {/* Protected Routes - Now Public for Demo */}
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/transactions" element={<Transactions />} />
+          <Route path="/analysis" element={<Analysis />} />
+          <Route path="/budgets" element={<Budgets />} />
+          <Route path="/accounts" element={<Accounts />} />
+          <Route path="/profile" element={<Profile />} />
+        </Routes>
       </div>
+
+      {!isAuthPage && <Footer />}
+      <ToastContainer position="top-right" autoClose={3000} theme="dark" />
     </div>
   );
 };
 
-// Wrap App with Router
-const WrappedApp: React.FC = () => (
-  <Router>
-    <App />
-  </Router>
-);
+const App: React.FC = () => {
+  return (
+    <Router>
+      <AuthProvider>
+        <SidebarProvider>
+          <AppContent />
+        </SidebarProvider>
+      </AuthProvider>
+    </Router>
+  );
+};
 
-export default WrappedApp;
+export default App;
