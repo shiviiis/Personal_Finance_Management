@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // Create axios instance with base configuration
 const api = axios.create({
-  baseURL: 'http://localhost:5000', // Update this to match your backend URL
+  baseURL: import.meta.env.VITE_API_URL || 'https://personal-finance-management-iusj.onrender.com', 
   headers: {
     'Content-Type': 'application/json',
   },
