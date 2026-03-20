@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import { TrendingUp, Shield, PieChart, Bell } from 'lucide-react';
 import Button from '../components/ui/Button';
 import Card from '../components/ui/Card';
-import DashboardMenu from '../components/layout/DashboardMenu';
 import './Homepage.css';
 
 const Homepage: React.FC = () => {
