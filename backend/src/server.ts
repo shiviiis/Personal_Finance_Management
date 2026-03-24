@@ -10,11 +10,7 @@ import transactionRoutes from "./routes/transRoutes";
 dotenv.config();
 
 const app = express();
-// TEMPORARY: Allow all origins (for testing only - not recommended for production)
-app.use(cors({ 
-  origin: true, 
-  credentials: true 
-}));
+app.use(cors({ origin: "http://localhost:5173", credentials: true }));
 // app.use((req, res, next) => {
 //     res.header("Access-Control-Allow-Origin", "http://localhost:5173");
 //     res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
