@@ -6,6 +6,7 @@ import { ErrorMiddleware } from "./middlewares/errormiddleware";
 import { DBconnection } from "./database/DBconnection";
 import userRoutes from "./routes/userRoutes";
 import transactionRoutes from "./routes/transRoutes";
+import dataRoutes from "./routes/dataRoutes";
 
 dotenv.config();
 
@@ -49,6 +50,7 @@ DBconnection();
 
 app.use("/api/users", userRoutes);
 app.use("/api/transactions", transactionRoutes);
+app.use("/api/data", dataRoutes);
 
 
 

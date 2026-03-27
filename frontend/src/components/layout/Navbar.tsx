@@ -70,10 +70,7 @@ const Navbar: React.FC = () => {
               )}
             </div>
           ) : (
-            <>
-              <Link to="/login" className="btn-login">Sign In</Link>
-              <Link to="/register" className="btn-register">Get Started</Link>
-            </>
+            <Link to="/register" className="btn-register">Get Started</Link>
           )}
         </div>
 
@@ -148,10 +145,7 @@ const Navbar: React.FC = () => {
               <X size={18} /> Logout
             </button>
           ) : (
-            <>
-              <Link to="/login" className="mobile-link" onClick={() => setIsMobileMenuOpen(false)}>Sign In</Link>
-              <Link to="/register" className="mobile-link" onClick={() => setIsMobileMenuOpen(false)}>Get Started</Link>
-            </>
+            <Link to="/register" className="mobile-link" onClick={() => setIsMobileMenuOpen(false)}>Get Started</Link>
           )}
         </div>
       )}

@@ -1,13 +1,15 @@
-import React from 'react';
-import { User, Mail, LogOut } from 'lucide-react';
+import React, { useState } from 'react';
+import { User, Mail, LogOut, Download, Upload } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import Card from '../components/ui/Card';
 import Button from '../components/ui/Button';
 import Sidebar from '../components/layout/Sidebar';
+import ExportImport from './exportImport';
 import './Profile.css';
 
 const Profile: React.FC = () => {
   const { user, logout } = useAuth();
+  const [showExportImport, setShowExportImport] = useState(false);
 
   if (!user) return null;
 
@@ -17,7 +19,7 @@ const Profile: React.FC = () => {
       <main className="dashboard-main">
         <div className="dashboard-header">
           <h1>Profile</h1>
-          <p>Manage your account settings</p>
+          <p>Manage your account settings and data</p>
         </div>
 
         <div className="profile-grid">
@@ -50,6 +52,22 @@ const Profile: React.FC = () => {
               </div>
             </div>
           </Card>
+
+          <Card>
+            <h3 className="card-title">Data Management</h3>
+            <div className="actions-list">
+              <Button variant="outline" fullWidth onClick={() => setShowExportImport(!showExportImport)}>
+                {showExportImport ? <User size={20} /> : <Download size={20} />} 
+                {showExportImport ? 'Close Data Management' : 'Export / Import Data'}
+              </Button>
+            </div>
+          </Card>
+
+          {showExportImport && (
+            <Card className="full-width-card">
+              <ExportImport />
+            </Card>
+          )}
 
           <Card>
             <h3 className="card-title">Actions</h3>

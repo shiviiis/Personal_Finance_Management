@@ -1,16 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { Link, useLocation } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 import "./CSS_comp/navbar.css";
 import AuthButton from "./AuthButton";
 
 const Navbar: React.FC = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const { isAuthenticated } = useAuth();
   const location = useLocation();
-
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    setIsAuthenticated(!!token);
-  }, []);
 
   return (
     <nav className="navbar">
@@ -55,8 +51,8 @@ const Navbar: React.FC = () => {
                 </Link>
               </li>
               <li>
-                <AuthButton setIsAuthenticated={setIsAuthenticated} />
-              </li>{" "}
+                <AuthButton />
+              </li>
             </>
           ) : (
             <>

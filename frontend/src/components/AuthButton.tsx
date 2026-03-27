@@ -1,13 +1,10 @@
 import React from "react";
+import { useAuth } from "../context/AuthContext";
 
-interface AuthButtonProps {
-  setIsAuthenticated: React.Dispatch<React.SetStateAction<boolean>>;
-}
-
-const AuthButton: React.FC<AuthButtonProps> = ({ setIsAuthenticated }) => {
+const AuthButton: React.FC = () => {
+  const { logout } = useAuth();
   const handleLogout = () => {
-    localStorage.removeItem("token");
-    setIsAuthenticated(false);
+    logout();
   };
 
   return (

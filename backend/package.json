@@ -4,9 +4,9 @@
   "description": "This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.",
   "main": "index.js",
   "scripts": {
-    "build" : "tsc",
+    "build": "tsc",
     "start": "node dist/server.js",
-    "dev": "nodemon --ext ts --exec ts-node src/server.ts"
+    "dev": "cross-env TS_NODE_TRANSPILE_ONLY=true nodemon --ext ts --exec ts-node src/server.ts"
   },
   "keywords": [],
   "author": "",
@@ -32,6 +32,7 @@
     "@types/node": "^22.13.9",
     "@types/nodemailer": "^6.4.17",
     "@types/validator": "^13.12.2",
+    "cross-env": "^10.1.0",
     "nodemon": "^3.1.9",
     "ts-node": "^10.9.2",
     "typescript": "^5.8.2"
