@@ -3,7 +3,11 @@ import { Link } from 'react-router-dom';
 import { Github, Twitter, Linkedin, Mail } from 'lucide-react';
 import './Footer.css';
 
-const Footer: React.FC = () => {
+interface FooterProps {
+  condition?: boolean;
+}
+
+const Footer: React.FC<FooterProps> = ({ condition }) => {
   return (
     <footer className="footer">
       <div className="footer-container">

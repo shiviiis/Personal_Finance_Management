@@ -4,7 +4,6 @@
   align-items: center;
   justify-content: center;
   padding: var(--spacing-lg);
-  padding-top: 100px;
 }
 
 .auth-card {

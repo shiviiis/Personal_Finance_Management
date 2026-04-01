@@ -1,11 +1,24 @@
+/* ===== App Layout ===== */
 .app {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
 }
 
+/* Content wrapper below the fixed navbar */
 .app-content {
   flex: 1;
   display: flex;
   flex-direction: column;
+}
+
+/* Auth pages have NO navbar, so no top padding needed */
+.app-content.auth-content {
+  padding-top: 0;
+}
+
+/* Pages WITH a navbar need clearance */
+.app-content.public-content,
+.app-content.dashboard-content {
+  padding-top: 72px;
 }

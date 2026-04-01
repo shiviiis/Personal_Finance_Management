@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { User, Mail, LogOut, Download, Upload } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { User, Mail, LogOut, Download, ArrowRight } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import Card from '../components/ui/Card';
 import Button from '../components/ui/Button';
@@ -11,7 +12,35 @@ const Profile: React.FC = () => {
   const { user, logout } = useAuth();
   const [showExportImport, setShowExportImport] = useState(false);
 
-  if (!user) return null;
+  // Show a proper login prompt if not authenticated
+  if (!user) {
+    return (
+      <div className="dashboard-layout">
+        <Sidebar />
+        <main className="dashboard-main">
+          <div className="dashboard-header">
+            <h1>Profile</h1>
+            <p>Manage your account settings and data</p>
+          </div>
+          <Card className="profile-card" style={{ textAlign: 'center', padding: '3rem' }}>
+            <User size={64} style={{ color: 'var(--color-text-muted)', marginBottom: '1rem' }} />
+            <h2 style={{ marginBottom: '0.5rem' }}>Not Logged In</h2>
+            <p style={{ color: 'var(--color-text-muted)', marginBottom: '1.5rem' }}>
+              Please sign in to view your profile and manage your account.
+            </p>
+            <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center' }}>
+              <Link to="/login">
+                <Button>Sign In <ArrowRight size={18} /></Button>
+              </Link>
+              <Link to="/register">
+                <Button variant="outline">Create Account</Button>
+              </Link>
+            </div>
+          </Card>
+        </main>
+      </div>
+    );
+  }
 
   return (
     <div className="dashboard-layout">
