@@ -5,10 +5,10 @@ import { isAuthorized } from "../middlewares/AuthMiddleware";
 const router = express.Router();
 
 // Export data route
-router.get("/export", isAuthorized, exportUserData);
+router.get("/export", isAuthorized as any, exportUserData);
 
 // Import data routes
-router.post("/import", isAuthorized, importUserData);
-router.post("/import/preview", isAuthorized, previewImportData);
+router.post("/import", isAuthorized as any, importUserData);
+router.post("/import/preview", isAuthorized as any, previewImportData);
 
 export default router;

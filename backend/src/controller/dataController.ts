@@ -47,6 +47,7 @@ export const exportUserData = catchAsyncError(
       res.setHeader('Content-Disposition', `attachment; filename=finance-backup-${new Date().toISOString().split('T')[0]}.json`);
 
       res.status(200).json(exportData);
+      return;
     } catch (error) {
       console.error('Export error:', error);
       throw error; // Let catchAsyncError handle it
@@ -122,6 +123,7 @@ export const importUserData = catchAsyncError(
             .reduce((sum: number, t: any) => sum + t.amount, 0),
         }
       });
+      return;
     } catch (error: any) {
       console.error('Import error:', error);
       res.status(500).json({ 
@@ -172,6 +174,7 @@ export const previewImportData = catchAsyncError(
         statistics: stats,
         sampleTransactions: transactions.slice(0, 5) // Show first 5 transactions
       });
+      return;
     } catch (error) {
       console.error('Preview error:', error);
       throw error; // Let catchAsyncError handle it

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { TrendingUp, TrendingDown, DollarSign } from 'lucide-react';
+import { TrendingUp, TrendingDown, DollarSign, Wallet } from 'lucide-react';
 import api from '../utils/api';
 import Card from '../components/ui/Card';
 import Sidebar from '../components/layout/Sidebar';
@@ -13,20 +13,41 @@ interface Transaction {
   date: string;
 }
 
+interface BankBalance {
+  total_balance: number;
+  accounts_count: number;
+}
+
 const Dashboard: React.FC = () => {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const [bankBalance, setBankBalance] = useState<BankBalance | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetchTransactions();
+    fetchDashboardData();
   }, []);
 
-  const fetchTransactions = async () => {
+  const fetchDashboardData = async () => {
     try {
-      const response = await api.get('/api/transactions');
-      setTransactions(response.data.transactions || []);
+      // Fetch transactions
+      const transactionsResponse = await api.get('/api/transactions');
+      setTransactions(transactionsResponse.data.transactions || []);
+
+      // Fetch bank balances
+      try {
+        const balanceResponse = await api.get('/api/banks/dashboard/balances');
+        if (balanceResponse.data.success) {
+          setBankBalance({
+            total_balance: balanceResponse.data.total_balance,
+            accounts_count: balanceResponse.data.accounts_count,
+          });
+        }
+      } catch (bankError) {
+        // Bank endpoints might not be configured yet, so we'll just skip
+        console.log('Bank balances not available (expected in initial setup)');
+      }
     } catch (error) {
-      console.error('Error fetching transactions:', error);
+      console.error('Error fetching dashboard data:', error);
     } finally {
       setLoading(false);
     }
@@ -41,6 +62,13 @@ const Dashboard: React.FC = () => {
     .reduce((sum, t) => sum + t.amount, 0);
 
   const savings = totalIncome - totalExpense;
+
+  const formatCurrency = (amount: number) => {
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
+    }).format(amount);
+  };
 
   return (
     <div className="dashboard-layout">
@@ -58,7 +86,7 @@ const Dashboard: React.FC = () => {
             </div>
             <div className="stat-info">
               <p className="stat-label">Total Income</p>
-              <h2 className="stat-value">${totalIncome.toFixed(2)}</h2>
+              <h2 className="stat-value">{formatCurrency(totalIncome)}</h2>
             </div>
           </Card>
 
@@ -68,7 +96,7 @@ const Dashboard: React.FC = () => {
             </div>
             <div className="stat-info">
               <p className="stat-label">Total Expenses</p>
-              <h2 className="stat-value">${totalExpense.toFixed(2)}</h2>
+              <h2 className="stat-value">{formatCurrency(totalExpense)}</h2>
             </div>
           </Card>
 
@@ -78,9 +106,22 @@ const Dashboard: React.FC = () => {
             </div>
             <div className="stat-info">
               <p className="stat-label">Net Savings</p>
-              <h2 className="stat-value">${savings.toFixed(2)}</h2>
+              <h2 className="stat-value">{formatCurrency(savings)}</h2>
             </div>
           </Card>
+
+          {bankBalance && (
+            <Card className="stat-card bank-card">
+              <div className="stat-icon">
+                <Wallet size={32} />
+              </div>
+              <div className="stat-info">
+                <p className="stat-label">Bank Balance</p>
+                <h2 className="stat-value">{formatCurrency(bankBalance.total_balance)}</h2>
+                <p className="stat-sublabel">{bankBalance.accounts_count} accounts</p>
+              </div>
+            </Card>
+          )}
         </div>
 
         <Card className="recent-transactions">

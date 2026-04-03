@@ -24,11 +24,12 @@ import Terms from './pages/Terms';
 import Analysis from './pages/Analysis';
 import Budgets from './pages/Budgets';
 import Accounts from './pages/Accounts';
+import Banks from './pages/Banks';
 
 import './App.css';
 
 const AUTH_PATHS = ['/login', '/register', '/verify-otp'];
-const DASHBOARD_PATHS = ['/dashboard', '/transactions', '/analysis', '/budgets', '/accounts', '/profile'];
+const DASHBOARD_PATHS = ['/dashboard', '/transactions', '/analysis', '/budgets', '/banks', '/accounts', '/profile'];
 
 const AppContent: React.FC = () => {
   const location = useLocation();
@@ -68,6 +69,7 @@ const AppContent: React.FC = () => {
           <Route path="/transactions" element={<Transactions />} />
           <Route path="/analysis" element={<Analysis />} />
           <Route path="/budgets" element={<Budgets />} />
+          <Route path="/banks" element={<Banks />} />
           <Route path="/accounts" element={<Accounts />} />
           <Route path="/profile" element={<Profile />} />
         </Routes>
