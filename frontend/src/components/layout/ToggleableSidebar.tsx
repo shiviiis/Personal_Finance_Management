@@ -18,20 +18,6 @@ const ToggleableSidebar: React.FC = () => {
     { path: '/profile', icon: User, label: 'Profile' },
   ];
 
-  // Close sidebar when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (isSidebarOpen && sidebarRef.current && !sidebarRef.current.contains(event.target as Node)) {
-        closeSidebar();
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [isSidebarOpen, closeSidebar]);
-
   // Handle escape key to close sidebar
   useEffect(() => {
     const handleEscape = (event: KeyboardEvent) => {
@@ -46,45 +32,58 @@ const ToggleableSidebar: React.FC = () => {
     };
   }, [isSidebarOpen, closeSidebar]);
 
-  // Handler for menu items that ensures immediate closure
-  const handleMenuItemClick = (path: string) => {
-    closeSidebar();
-  };
+  // Prevent body scroll when sidebar is open
+  useEffect(() => {
+    if (isSidebarOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isSidebarOpen]);
 
   if (!isSidebarOpen) {
     return null;
   }
 
   return (
-    <aside 
-      ref={sidebarRef}
-      className="toggleable-sidebar sidebar-open"
-    >
-      <div className="sidebar-header">
-        <h3>Menu</h3>
-        <button className="sidebar-close-btn" onClick={closeSidebar}>
-          <X size={24} />
-        </button>
-      </div>
-      <div className="sidebar-content">
-        {menuItems.map((item) => {
-          const Icon = item.icon;
-          const isActive = location.pathname === item.path;
-          
-          return (
-            <Link
-              key={item.path}
-              to={item.path}
-              className={`sidebar-item ${isActive ? 'sidebar-item-active' : ''}`}
-              onClick={() => handleMenuItemClick(item.path)}
-            >
-              <Icon size={20} />
-              <span>{item.label}</span>
-            </Link>
-          );
-        })}
-      </div>
-    </aside>
+    <>
+      {/* Dark backdrop overlay */}
+      <div className="sidebar-overlay" onClick={closeSidebar} />
+      
+      {/* Sidebar drawer */}
+      <aside 
+        ref={sidebarRef}
+        className="toggleable-sidebar sidebar-open"
+      >
+        <div className="sidebar-header">
+          <h3>Menu</h3>
+          <button className="sidebar-close-btn" onClick={closeSidebar} aria-label="Close menu">
+            <X size={24} />
+          </button>
+        </div>
+        <div className="sidebar-content">
+          {menuItems.map((item) => {
+            const Icon = item.icon;
+            const isActive = location.pathname === item.path;
+            
+            return (
+              <Link
+                key={item.path}
+                to={item.path}
+                className={`sidebar-item ${isActive ? 'sidebar-item-active' : ''}`}
+                onClick={closeSidebar}
+              >
+                <Icon size={20} />
+                <span>{item.label}</span>
+              </Link>
+            );
+          })}
+        </div>
+      </aside>
+    </>
   );
 };
 

@@ -1,97 +1,55 @@
+/* Fixed sidebar for desktop dashboard views */
 .sidebar {
   position: fixed;
   left: 0;
-  top: 72px; /* Below navbar */
+  top: 72px;
   bottom: 0;
   width: 260px;
-  background: var(--glass-bg);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  background: rgba(15, 23, 42, 0.95);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   border-right: 1px solid var(--glass-border);
-  padding: var(--spacing-lg);
+  padding: 1.5rem 1rem;
   z-index: 50;
-  transition: transform 0.3s ease-in-out;
+  overflow-y: auto;
 }
 
-/* Default state - always visible */
-.sidebar:not([class*="sidebar-"]) {
-  transform: translateX(0);
-}
-
-/* Toggleable states */
-.sidebar.sidebar-open {
-  transform: translateX(0);
-}
-
-.sidebar.sidebar-closed {
-  transform: translateX(-100%);
-}
-
-.sidebar-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: var(--spacing-lg);
-  padding-bottom: var(--spacing-md);
-  border-bottom: 1px solid var(--glass-border);
-}
-
-.sidebar-header h3 {
-  margin: 0;
-  color: var(--color-text-primary);
-  font-size: 1.25rem;
-  font-weight: 600;
-}
-
-.sidebar-close-btn {
-  background: none;
-  border: none;
-  color: var(--color-text-secondary);
-  cursor: pointer;
-  padding: 0.5rem;
-  border-radius: var(--radius-md);
-  transition: all var(--transition-fast);
-}
-
-.sidebar-close-btn:hover {
-  background: var(--glass-bg-hover);
-  color: var(--color-text-primary);
-}
-
-.sidebar-content {
+.sidebar .sidebar-content {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-sm);
+  gap: 0.25rem;
 }
 
-.sidebar-item {
+.sidebar .sidebar-item {
   display: flex;
   align-items: center;
-  gap: 1rem;
-  padding: 0.875rem 1rem;
+  gap: 0.875rem;
+  padding: 0.75rem 1rem;
   color: var(--color-text-secondary);
   font-weight: 500;
+  font-size: 0.938rem;
   border-radius: var(--radius-lg);
   transition: all var(--transition-fast);
   text-decoration: none;
 }
 
-.sidebar-item:hover {
+.sidebar .sidebar-item:hover {
   background: var(--glass-bg-hover);
   color: var(--color-text-primary);
 }
 
-.sidebar-item-active {
+.sidebar .sidebar-item-active {
   background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
   color: white;
-  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.25);
 }
 
-.sidebar-item-active:hover {
+.sidebar .sidebar-item-active:hover {
   background: linear-gradient(135deg, var(--color-primary-dark) 0%, var(--color-secondary-dark) 100%);
+  color: white;
 }
 
-/* Mobile: hide sidebar by default */
+/* Hide fixed sidebar on tablet/mobile — use toggleable drawer instead */
 @media (max-width: 1024px) {
   .sidebar {
     display: none;

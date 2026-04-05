@@ -3,7 +3,14 @@ import { Link } from "react-router-dom";
 import "./CSS_comp/footer.css";
 import "./CSS_comp/navbarphone.css";
 
-const Footer: React.FC = () => {
+interface FooterProps {
+  condition?: boolean;
+}
+
+const Footer: React.FC<FooterProps> = ({ condition = true }) => {
+  if (!condition) {
+    return null;
+  }
   return (
     <footer className="footer">
       <div className="footer-container">

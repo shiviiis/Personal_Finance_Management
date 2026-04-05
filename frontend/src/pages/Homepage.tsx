@@ -1,11 +1,13 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { TrendingUp, Shield, PieChart, Bell } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
 import Button from '../components/ui/Button';
 import Card from '../components/ui/Card';
 import './Homepage.css';
 
 const Homepage: React.FC = () => {
+  const { isAuthenticated } = useAuth();
   const features = [
     { icon: TrendingUp, title: 'Track Expenses', description: 'Monitor your spending and income in real-time' },
     { icon: PieChart, title: 'Visual Analytics', description: 'Beautiful charts and insights about your finances' },
@@ -28,9 +30,11 @@ const Homepage: React.FC = () => {
             <Link to="/register">
               <Button size="lg">Get Started Free</Button>
             </Link>
-            <Link to="/login">
-              <Button variant="outline" size="lg">Sign In</Button>
-            </Link>
+            {!isAuthenticated && (
+              <Link to="/login">
+                <Button variant="outline" size="lg">Sign In</Button>
+              </Link>
+            )}
           </div>
         </div>
       </section>

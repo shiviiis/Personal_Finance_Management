@@ -21,6 +21,15 @@ const TransSchema= new mongoose.Schema({
     name:{
         type:String,
         required:true
+    },
+    type:{
+        type: String,
+        enum: ["income", "expense"],
+        default: "expense"
+    },
+    metadata:{
+        type: mongoose.Schema.Types.Mixed,
+        default: {}
     }
 });
 

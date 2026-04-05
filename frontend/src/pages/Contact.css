@@ -1,7 +1,6 @@
 .contact-page {
-  min-height: 100vh;
-  padding-top: 100px;
-  padding-bottom: var(--spacing-2xl);
+  min-height: calc(100vh - 72px);
+  padding: var(--spacing-2xl) 0;
 }
 
 .contact-container {
@@ -28,6 +27,7 @@
   display: grid;
   grid-template-columns: 1fr 2fr;
   gap: var(--spacing-xl);
+  align-items: start;
 }
 
 .contact-info h3 {
@@ -60,6 +60,7 @@
 .contact-item p {
   color: var(--color-text-muted);
   font-size: 0.875rem;
+  margin-bottom: 0;
 }
 
 .contact-form {
@@ -70,6 +71,18 @@
 
 .contact-form h3 {
   margin-bottom: var(--spacing-md);
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.input-label {
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: var(--color-text-primary);
 }
 
 .contact-textarea {
@@ -99,5 +112,9 @@
 @media (max-width: 768px) {
   .contact-grid {
     grid-template-columns: 1fr;
+  }
+
+  .contact-page {
+    padding: var(--spacing-xl) 0;
   }
 }

@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
-import { Home, PieChart, CreditCard, List, User, Menu, X } from "lucide-react";
+import { Home, PieChart, CreditCard, List, User, Menu, X, Building2 } from "lucide-react";
 import "./CSS_comp/sidebar.css";
 
 interface SidebarProps {
@@ -63,6 +63,11 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, setIsOpen }) => {
           <li>
             <Link to="/budgets">
               <CreditCard size={20} /> <span>Budgets</span>
+            </Link>
+          </li>
+          <li>
+            <Link to="/banks">
+              <Building2 size={20} /> <span>Bank Connections</span>
             </Link>
           </li>
           <li>
