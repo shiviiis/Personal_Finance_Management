@@ -35,9 +35,7 @@ const Navbar: React.FC = () => {
                 >
                   Records
                 </Link>
-              </li>
-              
-             
+              </li>         
               <li>
                 <Link
                   to="/profile"
