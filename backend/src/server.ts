@@ -15,7 +15,7 @@ const app = express();
 const allowedOrigins = [
   'http://localhost:5173',
   'http://localhost:5174',
-  'https://personal-finance-management-rfaqvj1af.vercel.app'
+  'https://personal-finance-management-7krf29nrr.vercel.app'
 ];
 
 app.use(cors({ 
