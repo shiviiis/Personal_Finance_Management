@@ -10,6 +10,7 @@ interface Transaction {
   name: string;
   amount: number;
   category: string;
+  type : string;
   date: string;
 }
 
@@ -34,7 +35,7 @@ const Analysis: React.FC = () => {
 
   // Calculate category-wise expenses
   const categoryExpenses = transactions
-    .filter(t => t.category.toLowerCase() !== 'income')
+    .filter(t => t.type.toLowerCase() !== 'income')
     .reduce((acc: { [key: string]: number }, transaction) => {
       acc[transaction.category] = (acc[transaction.category] || 0) + transaction.amount;
       return acc;
@@ -46,10 +47,11 @@ const Analysis: React.FC = () => {
     if (!acc[month]) {
       acc[month] = { income: 0, expense: 0 };
     }
-    if (transaction.category.toLowerCase() === 'income') {
+    console.log(transaction.type.toLowerCase());
+    if (transaction.type.toLowerCase() === 'income') {
       acc[month].income += transaction.amount;
     } else {
-      acc[month].expense += transaction.amount;
+      acc[month].expense -= transaction.amount;
     }
     return acc;
   }, {});

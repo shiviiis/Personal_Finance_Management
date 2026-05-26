@@ -9,6 +9,5 @@ router.post("/",isAuthorized as any, addTransaction);
 router.get("/",isAuthorized as any, getTransactions);
 router.put("/:id",isAuthorized as any, updateTransaction);
 router.delete("/:id",isAuthorized as any, deleteTransaction);
-router.get("/download/:type",isAuthorized as any, generateTransactionPDF);
 
 export default router;

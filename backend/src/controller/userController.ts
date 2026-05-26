@@ -48,7 +48,6 @@ export const registerUser = catchAsyncError(
 
       await User.create({ firstname, lastname, Email, Password : hashedPassword,otp,otpExpires});
       await sendOTP(Email, otp);
-      
 
       res.status(200).json({ message: "OTP sent to email. Please verify." });
     } catch (error) {

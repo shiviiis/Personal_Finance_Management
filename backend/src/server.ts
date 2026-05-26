@@ -5,12 +5,12 @@ import cookieParser from "cookie-parser";
 import { DBconnection } from "./database/DBconnection";
 import userRoutes from "./routes/userRoutes";
 import transactionRoutes from "./routes/transRoutes";
-import dataRoutes from "./routes/dataRoutes";
-import bankRoutes from "./routes/bankRoutes";
+
 
 dotenv.config();
 
 const app = express();
+
 // Allow requests from localhost and Vercel deployment
 const allowedOrigins = [
   'http://localhost:5173',
@@ -31,6 +31,8 @@ app.use(cors({
   },
   credentials: true 
 }));
+
+
 // app.use((req, res, next) => {
 //     res.header("Access-Control-Allow-Origin", "http://localhost:5173");
 //     res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
@@ -39,21 +41,13 @@ app.use(cors({
 //   });
   
 app.use(cookieParser());
-
-
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
-
-
 
 DBconnection();
 
 app.use("/api/users", userRoutes);
 app.use("/api/transactions", transactionRoutes);
-app.use("/api/data", dataRoutes);
-app.use("/api/banks", bankRoutes);
-
-
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

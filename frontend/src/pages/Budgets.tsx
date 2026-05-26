@@ -13,12 +13,7 @@ interface Budget {
 }
 
 const Budgets: React.FC = () => {
-  const [budgets] = useState<Budget[]>([
-    { id: '1', category: 'Food & Dining', limit: 500, spent: 320 },
-    { id: '2', category: 'Transportation', limit: 200, spent: 180 },
-    { id: '3', category: 'Entertainment', limit: 150, spent: 95 },
-    { id: '4', category: 'Shopping', limit: 300, spent: 420 },
-  ]);
+  const [budgets] = useState<Budget[]>([]);
 
   const getProgressColor = (percentage: number) => {
     if (percentage >= 100) return '#ef4444';
@@ -26,7 +21,7 @@ const Budgets: React.FC = () => {
     return 'var(--color-primary)';
   };
 
-  return (
+  return ( 
     <div className="dashboard-layout">
       <Sidebar />
       <main className="dashboard-main">

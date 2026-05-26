@@ -24,8 +24,8 @@ const TransSchema= new mongoose.Schema({
     },
     type:{
         type: String,
-        enum: ["income", "expense"],
-        default: "expense"
+        enum: ["Income", "Expense"],
+        default: "Expense"
     },
     metadata:{
         type: mongoose.Schema.Types.Mixed,

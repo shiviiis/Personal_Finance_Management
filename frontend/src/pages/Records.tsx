@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./CSS_primary/records.css";
+const API_URL = import.meta.env.VITE_API_URL;
 
 type Transaction = {
   _id: string;
@@ -53,7 +54,7 @@ const Records: React.FC = () => {
 
         setNewTransaction((prev) => ({ ...prev, userId }));
 
-        const resTransactions = await axios.get(`http://localhost:5000/api/transactions/${userId}`);
+        const resTransactions = await axios.get(`${API_URL}/api/transactions/${userId}`);
         setTransactions(resTransactions.data.transactions);
       } catch (error) {
         console.error("Error fetching transactions:", error);
@@ -76,7 +77,7 @@ const Records: React.FC = () => {
         return;
       }
 
-      const res = await axios.post("http://localhost:5000/api/transactions", newTransaction, {
+      const res = await axios.post(`${API_URL}/api/transactions`, newTransaction, {
         headers: {
           Authorization: `Bearer ${token}`, // Add token to headers
         },
@@ -91,7 +92,7 @@ const Records: React.FC = () => {
 
   const handleDeleteTransaction = async (id: string) => {
     try {
-      await axios.delete(`http://localhost:5000/api/transactions/${id}`);
+      await axios.delete(`${API_URL}/api/transactions/${id}`);
       setTransactions(transactions.filter((tx) => tx._id !== id));
     } catch (error) {
       console.error("Error deleting transaction:", error);
